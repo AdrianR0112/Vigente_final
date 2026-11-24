@@ -81,7 +81,7 @@
         </div>
         <aside class="hero-resource" aria-label="Estructura organizacional">
           <p>Consulta las áreas, los cargos y las líneas de reporte de la estructura proyectada.</p>
-          ${organizationLink("on-dark")}
+          ${organizationLink("primary")}
         </aside>
       </header>
 
