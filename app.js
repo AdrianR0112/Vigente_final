@@ -8,6 +8,7 @@
   const toast = document.querySelector("#toast");
   const mobileNav = document.querySelector("#mobile-navigation");
   const navToggle = document.querySelector(".nav-toggle");
+  const organizationUrl = "https://adrianr0112.github.io/remuneraciones/";
   const icons = {
     emprendimiento: "briefcase",
     tributarias: "receipt",
@@ -31,60 +32,72 @@
     const header = document.querySelector(".site-header");
     if (!header.querySelector(".brand-lockup")) header.insertAdjacentHTML("afterbegin", brandMarkup());
     mobileNav.innerHTML = document.querySelector(".top-nav").innerHTML;
-    navToggle.addEventListener("click", () => {
-      const open = navToggle.getAttribute("aria-expanded") === "true";
-      navToggle.setAttribute("aria-expanded", String(!open));
-      mobileNav.hidden = open;
-    });
+    const setMenuOpen = (open) => {
+      navToggle.setAttribute("aria-expanded", String(open));
+      navToggle.querySelector(".sr-only").textContent = open ? "Cerrar menú" : "Abrir menú";
+      mobileNav.hidden = !open;
+    };
+    navToggle.addEventListener("click", () => setMenuOpen(mobileNav.hidden));
     mobileNav.addEventListener("click", (event) => {
       if (event.target.closest("a")) {
-        mobileNav.hidden = true;
-        navToggle.setAttribute("aria-expanded", "false");
+        setMenuOpen(false);
+        document.querySelector("#main-content").focus();
       }
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && !mobileNav.hidden && navToggle.offsetWidth) {
+        setMenuOpen(false);
+        navToggle.focus();
+      }
+    });
+
+    document.querySelector(".skip-link").addEventListener("click", (event) => {
+      event.preventDefault();
+      setMenuOpen(false);
+      const main = document.querySelector("#main-content");
+      main.focus({ preventScroll: true });
+      main.scrollIntoView();
     });
   }
 
-  function moduleIcon(moduleId) {
-    return icon(icons[moduleId]);
+  function organizationLink(style) {
+    return `<a class="button ${style}" href="${organizationUrl}" target="_blank" rel="noopener noreferrer">Abrir organigrama funcional ${icon("external")}<span class="sr-only"> (abre en otra pestaña)</span></a>`;
   }
 
   function homeTemplate() {
-    const moduleCards = data.modules.map((module) => `
-      <a class="module-card" href="#${module.id}">
-        <div>
-          <span class="module-icon">${moduleIcon(module.id)}</span>
-          <h3>${module.title}</h3>
-          <p>${module.description}</p>
-        </div>
-        <span class="module-link"><span>${module.short}</span>${icon("arrow")}</span>
-      </a>`).join("").replaceAll("#i-arrow", "#i-arrow");
+    const moduleLinks = data.modules.map((module) => `
+      <li><a class="module-link" href="#${module.id}">
+        <span class="module-icon ${module.tone}">${icon(icons[module.id])}</span>
+        <div><h3>${module.title}</h3><p>${module.description}</p></div>
+        ${icon("arrow")}
+      </a></li>`).join("");
 
-    return `<section class="page hero" aria-labelledby="home-title">
-      <div class="hero-grid">
+    return `<section class="page" aria-labelledby="home-title">
+      <header class="hero-grid">
         <div class="hero-copy">
-          <div>
-            <h1 id="home-title">Todo Vigente, en un solo lugar.</h1>
-            <p>Una lectura integrada del emprendimiento, sus obligaciones, el equipo que lo hace posible y el cierre responsable de una relación laboral.</p>
-          </div>
-          <div class="hero-footer">
-            <a class="button primary" href="#emprendimiento">Explorar los módulos ${icon("arrow")}</a>
-            <div class="hero-authors"><strong>Proyecto final</strong>${data.meta.authors.join(" · ")}</div>
-          </div>
+          <h1 id="home-title">Proyecto integrador Vigente</h1>
+          <p>Emprendimiento, obligaciones tributarias, nómina y liquidación laboral de una empresa ficticia de software para inventarios.</p>
+          <p class="hero-authors">${data.meta.authors.join(" · ")}</p>
         </div>
-        <div class="hero-insight" aria-label="Indicadores generales">
-          <div class="insight-cell mint"><span>Necesidad validada</span><strong>94,1 %</strong><small>de los comercios encuestados reportó pérdidas recientes.</small></div>
-          <div class="insight-cell blue"><span>Equipo visible</span><strong>5</strong><small>trabajadores con resultados de nómina ya calculados.</small></div>
-          <div class="insight-cell peach"><span>Costo devengado</span><strong>$10.933</strong><small>incluye remuneraciones, obligaciones y provisiones.</small></div>
-          <div class="insight-cell"><span>Evidencia disponible</span><strong>4</strong><small>documentos académicos vinculados a sus módulos.</small></div>
-        </div>
-      </div>
+        <aside class="hero-resource" aria-label="Estructura organizacional">
+          <p>Consulta las áreas, los cargos y las líneas de reporte de la estructura proyectada.</p>
+          ${organizationLink("on-dark")}
+        </aside>
+      </header>
 
-      <div class="module-intro">
-        <div><h2>Cuatro miradas de una misma empresa</h2><p>Selecciona un módulo para revisar sus resultados, supuestos y documentos. Los datos proyectados y simulados están identificados expresamente.</p></div>
-        <span class="tag simulated">Contexto académico 2026</span>
-      </div>
-      <div class="module-grid">${moduleCards}</div>
-      <div class="notice">${icon("info")}<span>Vigente es una empresa ficticia. Los casos tributario y de liquidación sirven como demostraciones académicas y no sustituyen declaraciones, cálculos ni trámites oficiales.</span></div>
+      <section class="home-section" aria-labelledby="modules-title">
+        <h2 id="modules-title">Módulos del proyecto</h2>
+        <ul class="module-list">${moduleLinks}</ul>
+      </section>
+      <section class="home-section" aria-labelledby="indicators-title">
+        <h2 id="indicators-title">Indicadores del proyecto</h2>
+        ${metricRow([
+          { label: "Comercios con pérdidas recientes", value: "94,1 %", note: "Según el sondeo de mercado" },
+          { label: "Nómina operativa", value: "5", note: "Trabajadores con resultados calculados" },
+          { label: "Costo devengado", value: "$10.933", note: "Incluye obligaciones y provisiones" },
+          { label: "Documentos de respaldo", value: "4", note: "Disponibles en los módulos" },
+        ])}
+      </section>
     </section>`;
   }
 
@@ -140,12 +153,10 @@
 
   function taxTemplate() {
     const tax = data.tax;
-    const purchases = tax.vat?.purchases || tax.vat;
     return `<section class="page module-page" data-module="tributarias">
       ${pageHeading("Obligaciones tributarias", "Identificación simulada de la empresa y lectura demostrativa del IVA para una operación mensual.", true)}
       ${tabs("tributarias", ["Identificación", "Caso de IVA", "Documentos"])}
       <div id="tributarias-panel-0" class="tab-panel" role="tabpanel" aria-labelledby="tributarias-tab-0">
-        <div class="notice">${icon("info")}<span>Los identificadores y movimientos de esta sección son ficticios. Se presentan para fines educativos y no corresponden a una declaración tributaria real.</span></div>
         <div class="content-grid equal">
           <article class="panel dark"><h2>${tax.legalName}</h2><p>RUC simulado</p><div class="calc-total"><span>${tax.ruc}</span><strong>Activo</strong></div><div class="evidence-list"><div><strong>Domicilio</strong><span>${tax.location}</span></div><div><strong>Obligación ilustrada</strong><span>Declaración de IVA sobre servicios gravados.</span></div></div></article>
           <article class="panel"><h2>Actividades económicas</h2><p>Los códigos describen el alcance tecnológico proyectado para Vigente.</p><div class="evidence-list">${tax.ciiu.map(([code, copy]) => `<div><strong>${code}</strong><span>${copy}</span></div>`).join("")}</div></article>
@@ -154,7 +165,7 @@
       <div id="tributarias-panel-1" class="tab-panel" role="tabpanel" aria-labelledby="tributarias-tab-1" hidden>
         ${metricRow([
           { label: "Ventas gravadas", value: money.format(700), note: "10 suscripciones anuales" },
-          { label: "IVA generado", value: money.format(91), note: "Tarifa académica aplicada: 13 %" },
+          { label: "IVA generado", value: money.format(91), note: "Tarifa académica aplicada: 13 %" },
           { label: "Crédito tributario", value: money.format(16.9), note: "Compras con comprobante" },
           { label: "Saldo ilustrativo", value: money.format(74.1), note: "IVA ventas menos IVA compras" },
         ])}
@@ -192,11 +203,17 @@
       </div>
       <div id="remuneraciones-panel-1" class="tab-panel" role="tabpanel" aria-labelledby="remuneraciones-tab-1" hidden>
         <div class="table-toolbar"><label class="search-box">${icon("search")}<span class="sr-only">Buscar trabajador</span><input id="worker-search" type="search" placeholder="Buscar por nombre o cargo" autocomplete="off" /></label><button class="button secondary" type="button" data-print>${icon("print")}Imprimir nómina</button></div>
-        <div class="table-wrap"><table><thead><tr><th>Trabajador y cargo</th><th class="num">Sueldo</th><th class="num">Novedades</th><th class="num">Bruta</th><th class="num">Descuentos</th><th class="num">Neto</th><th class="num">Costo</th></tr></thead><tbody id="worker-body">${workerRows(payroll.workers)}</tbody></table></div>
-        <div id="worker-empty" class="notice" hidden>${icon("info")}<span>No hay trabajadores que coincidan con la búsqueda.</span></div>
+        <div class="table-wrap" tabindex="0" role="region" aria-label="Tabla de nómina"><table><thead><tr><th>Trabajador y cargo</th><th class="num">Sueldo</th><th class="num">Novedades</th><th class="num">Bruta</th><th class="num">Descuentos</th><th class="num">Neto</th><th class="num">Costo</th></tr></thead><tbody id="worker-body">${workerRows(payroll.workers)}</tbody></table></div>
+        <p id="worker-empty" class="empty-state" role="status" hidden>No hay trabajadores que coincidan con la búsqueda.</p>
       </div>
       <div id="remuneraciones-panel-2" class="tab-panel" role="tabpanel" aria-labelledby="remuneraciones-tab-2" hidden>
-        <div class="panel"><h2>Estructura objetivo: 22 personas</h2><p>La organización propuesta representa una etapa futura de crecimiento y no debe confundirse con la nómina operativa de cinco trabajadores.</p><div class="org-chart">${org.map(([area, count, roles]) => `<article class="org-unit"><strong>${area}</strong><span>${count}</span><small>${roles}</small></article>`).join("")}</div></div>
+        <section class="panel">
+          <div class="section-heading">
+            <div><h2>Estructura objetivo: 22 personas</h2><p>Dotación proyectada para una etapa futura de crecimiento. La nómina operativa del período incluye cinco trabajadores.</p></div>
+            ${organizationLink("primary")}
+          </div>
+          <dl class="org-chart">${org.map(([area, count, roles]) => `<div class="org-unit"><dt>${area}</dt><dd><strong>${count}</strong><small>${roles}</small></dd></div>`).join("")}</dl>
+        </section>
         <div class="module-intro"><div><h2>Documentos de respaldo</h2><p>La estructura y las escalas muestran el modelo empresarial completo; la tabla de nómina conserva resultados de la aplicación existente.</p></div></div>
         ${documentCards("remuneraciones")}
       </div>
@@ -209,7 +226,6 @@
       ${pageHeading("Liquidación laboral", "Un caso académico de despido intempestivo, sus rubros y el control documental de salida.", true)}
       ${tabs("liquidacion", ["Formas de terminación", "Caso y paz y salvo", "Evidencias"])}
       <div id="liquidacion-panel-0" class="tab-panel" role="tabpanel" aria-labelledby="liquidacion-tab-0">
-        <div class="notice">${icon("info")}<span>El valor real depende de la forma de terminación, la historia laboral y la validación en el Sistema Único de Trabajo. Este resultado es exclusivamente demostrativo.</span></div>
         <div class="content-grid equal">${liquidation.terminationTypes.map(([name, copy]) => `<article class="panel"><h2>${name}</h2><p>${copy}</p></article>`).join("")}</div>
       </div>
       <div id="liquidacion-panel-1" class="tab-panel" role="tabpanel" aria-labelledby="liquidacion-tab-1" hidden>
@@ -235,7 +251,10 @@
     const route = routeName();
     const templates = { inicio: homeTemplate, emprendimiento: entrepreneurshipTemplate, tributarias: taxTemplate, remuneraciones: payrollTemplate, liquidacion: liquidationTemplate };
     app.innerHTML = templates[route]();
-    document.querySelectorAll("[data-route]").forEach((link) => link.classList.toggle("active", link.dataset.route === route));
+    document.querySelectorAll("[data-route]").forEach((link) => {
+      if (link.dataset.route === route) link.setAttribute("aria-current", "page");
+      else link.removeAttribute("aria-current");
+    });
     document.title = route === "inicio" ? "Vigente | Dashboard integrador" : `${data.modules.find((module) => module.id === route)?.title || "Vigente"} | Vigente`;
     bindTabs();
     bindDocuments();
