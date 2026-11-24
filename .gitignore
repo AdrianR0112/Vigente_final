@@ -1,0 +1,9 @@
+# Informe generado y artefactos temporales de validación
+output/
+tmp/
+
+# Archivos locales del sistema y editores
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

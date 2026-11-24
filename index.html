@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Dashboard integrador de los trabajos académicos de la empresa ficticia Vigente." />
+    <meta name="theme-color" content="#0f2d25" />
+    <title>Vigente | Proyecto integrador</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Saltar al contenido</a>
+
+    <svg class="svg-sprite" aria-hidden="true">
+      <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" /></symbol>
+      <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 11 9-8 9 8v9a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z" /></symbol>
+      <symbol id="i-briefcase" viewBox="0 0 24 24"><path d="M9 7V4h6v3M3 9h18v11H3zM3 12h18M10 12v2h4v-2" /></symbol>
+      <symbol id="i-receipt" viewBox="0 0 24 24"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2zM9 8h6M9 12h6M9 16h3" /></symbol>
+      <symbol id="i-people" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" /></symbol>
+      <symbol id="i-scale" viewBox="0 0 24 24"><path d="M12 3v18M5 6h14M5 6 2 12h6zM19 6l-3 6h6zM8 21h8" /></symbol>
+      <symbol id="i-doc" viewBox="0 0 24 24"><path d="M6 2h8l4 4v16H6zM14 2v5h5M9 12h6M9 16h6" /></symbol>
+      <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" /><path d="m20 20-4-4" /></symbol>
+      <symbol id="i-print" viewBox="0 0 24 24"><path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v7H6z" /></symbol>
+      <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18" /></symbol>
+      <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 3h7v7M10 14 21 3M21 13v7a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h7" /></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6" /></symbol>
+      <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" /><path d="M12 11v6M12 7h.01" /></symbol>
+    </svg>
+
+    <header class="site-header">
+      <a class="brand-lockup" href="#inicio" aria-label="Vigente, volver al inicio">
+        <span class="brand-bars" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="brand-copy"><strong>Vigente</strong><span>Dashboard integrador</span></span>
+      </a>
+      <nav class="top-nav" aria-label="Navegación principal">
+        <a href="#inicio" data-route="inicio">Inicio</a>
+        <a href="#emprendimiento" data-route="emprendimiento">Emprendimiento</a>
+        <a href="#tributarias" data-route="tributarias">Tributarias</a>
+        <a href="#remuneraciones" data-route="remuneraciones">Nómina</a>
+        <a href="#liquidacion" data-route="liquidacion">Liquidación</a>
+      </nav>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="mobile-navigation">
+        <span></span><span></span><span></span><span class="sr-only">Abrir menú</span>
+      </button>
+    </header>
+    <nav id="mobile-navigation" class="mobile-nav" aria-label="Navegación móvil" hidden></nav>
+
+    <main id="main-content" tabindex="-1">
+      <div id="app" aria-live="polite"></div>
+    </main>
+
+    <footer class="site-footer">
+      <div><strong>Vigente</strong><span>Software para gestión inteligente de inventarios</span></div>
+      <p>Proyecto académico · Ambato, Ecuador · 2026</p>
+    </footer>
+
+    <dialog id="document-dialog" class="document-dialog" aria-labelledby="document-title">
+      <div class="dialog-head">
+        <div><h2 id="document-title">Documento</h2><p id="document-description"></p></div>
+        <button class="icon-button" type="button" data-close-dialog aria-label="Cerrar documento"><svg><use href="#i-close" /></svg></button>
+      </div>
+      <div class="document-frame-wrap"><iframe id="document-frame" title="Vista previa del documento"></iframe></div>
+      <div class="dialog-actions">
+        <a id="document-open" class="button secondary" target="_blank" rel="noreferrer"><svg><use href="#i-external" /></svg>Abrir en otra pestaña</a>
+        <button class="button ghost" type="button" data-close-dialog>Cerrar</button>
+      </div>
+    </dialog>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
