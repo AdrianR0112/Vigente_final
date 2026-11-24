@@ -150,6 +150,7 @@ window.VIGENTE_DATA = Object.freeze({
     ],
   },
   documents: [
+    { id: "senadi", module: "emprendimiento", title: "Taller de registro de marca ante el SENADI", description: "Simulación académica con búsqueda exploratoria, clase de Niza y formulario de solicitud.", file: "assets/docs/taller-registro-marca-senadi-vigente.pdf", pages: 4 },
     { id: "plan", module: "emprendimiento", title: "Plan de negocio de Vigente", description: "Identidad, mercado, operación y proyección económica.", file: "assets/docs/plan-negocio-vigente.pdf", pages: 18 },
     { id: "structure", module: "remuneraciones", title: "Estructura organizacional", description: "Organigrama objetivo de 22 personas y 17 cargos.", file: "assets/docs/estructura-organizacional-vigente.pdf", pages: 2 },
     { id: "salary", module: "remuneraciones", title: "Escalas y remuneraciones", description: "Bandas salariales y costo laboral empresarial modelado.", file: "assets/docs/escalas-remuneraciones-vigente.pdf", pages: 3 },

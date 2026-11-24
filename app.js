@@ -95,7 +95,7 @@
           { label: "Comercios con pérdidas recientes", value: "94,1 %", note: "Según el sondeo de mercado" },
           { label: "Nómina operativa", value: "5", note: "Trabajadores con resultados calculados" },
           { label: "Costo devengado", value: "$10.933", note: "Incluye obligaciones y provisiones" },
-          { label: "Documentos de respaldo", value: "4", note: "Disponibles en los módulos" },
+          { label: "Documentos de respaldo", value: data.documents.length, note: "Disponibles en los módulos" },
         ])}
       </section>
     </section>`;
@@ -129,6 +129,21 @@
     return `<div class="documents-grid">${docs.map((document) => `<article class="document-item"><div>${icon("doc")}<h3>${document.title}</h3><p>${document.description}</p></div><footer><span>${document.pages} ${document.pages === 1 ? "página" : "páginas"}</span><button class="button secondary" type="button" data-document="${document.id}">Consultar ${icon("external")}</button></footer></article>`).join("")}</div>`;
   }
 
+  function resourceLinks(title, resources) {
+    return `<section class="module-intro official-resources">
+      <h2>${title}</h2>
+      <ul class="resource-list">
+        ${resources.map(([name, description, url]) => `<li>
+          <a class="resource-link" href="${url}" target="_blank" rel="noopener noreferrer">
+            <strong>${name}</strong>${icon("external")}
+            <span class="resource-description">${description}</span>
+            <span class="sr-only"> (abre en otra pestaña)</span>
+          </a>
+        </li>`).join("")}
+      </ul>
+    </section>`;
+  }
+
   function entrepreneurshipTemplate() {
     const business = data.entrepreneurship;
     const metrics = business.metrics.map((item) => ({ label: item.label, value: `${number.format(item.value)}${item.suffix}` }));
@@ -147,7 +162,18 @@
         <div class="module-intro"><div><h2>Modelo de negocio</h2><p>Los nueve bloques conectan la necesidad del comercio con un servicio recurrente, una operación ligera y acompañamiento directo.</p></div></div>
         <div class="canvas-grid">${business.canvas.map(([name, copy]) => `<article class="canvas-item"><strong>${name}</strong><p>${copy}</p></article>`).join("")}</div>
       </div>
-      <div id="emprendimiento-panel-2" class="tab-panel" role="tabpanel" aria-labelledby="emprendimiento-tab-2" hidden>${documentCards("emprendimiento")}</div>
+      <div id="emprendimiento-panel-2" class="tab-panel" role="tabpanel" aria-labelledby="emprendimiento-tab-2" hidden>
+        <section class="panel">
+          <h2>Registro de marca ante el SENADI</h2>
+          <p>El taller simula la solicitud de Vigente como marca mixta de servicios, compuesta por el nombre y el logotipo. Propone la clase 42 de Niza para su plataforma SaaS de gestión de inventarios y documenta una búsqueda exploratoria de signos similares.</p>
+        </section>
+        ${resourceLinks("Trámite de registro de marca", [
+          ["Guía de registro de marca", "Proceso de solicitud de signos distintivos.", "https://www.derechosintelectuales.gob.ec/como-registro-una-marca/"],
+          ["SENADI en Línea", "Casillero virtual, solicitudes y consulta de trámites.", "https://www.derechosintelectuales.gob.ec/senadi-en-linea/"],
+        ])}
+        <div class="module-intro"><h2>Documentos de respaldo</h2></div>
+        ${documentCards("emprendimiento")}
+      </div>
     </section>`;
   }
 
@@ -161,6 +187,11 @@
           <article class="panel dark"><h2>${tax.legalName}</h2><p>RUC simulado</p><div class="calc-total"><span>${tax.ruc}</span><strong>Activo</strong></div><div class="evidence-list"><div><strong>Domicilio</strong><span>${tax.location}</span></div><div><strong>Obligación ilustrada</strong><span>Declaración de IVA sobre servicios gravados.</span></div></div></article>
           <article class="panel"><h2>Actividades económicas</h2><p>Los códigos describen el alcance tecnológico proyectado para Vigente.</p><div class="evidence-list">${tax.ciiu.map(([code, copy]) => `<div><strong>${code}</strong><span>${copy}</span></div>`).join("")}</div></article>
         </div>
+        ${resourceLinks("Servicios del SRI", [
+          ["SRI en Línea", "Declaraciones, consultas y trámites tributarios.", "https://srienlinea.sri.gob.ec/sri-en-linea/"],
+          ["Facturador SRI", "Emisión de facturas y otros comprobantes electrónicos.", "https://facturadorsri.sri.gob.ec/portal-facturadorsri-internet/pages/inicio.html"],
+          ["Consulta de RUC", "Consulta pública por RUC o razón social.", "https://srienlinea.sri.gob.ec/facturacion-internet/consultas/publico/ruc-datos1.jspa"],
+        ])}
       </div>
       <div id="tributarias-panel-1" class="tab-panel" role="tabpanel" aria-labelledby="tributarias-tab-1" hidden>
         ${metricRow([
@@ -200,6 +231,9 @@
           <article class="panel"><h2>Costo por trabajador</h2><p>El costo devengado incorpora salario, beneficios, obligaciones patronales y provisiones del período.</p>${barChart(payroll.workers.map((worker) => ({ label: worker.name, value: worker.cost })), (item) => money.format(item.value))}</article>
           <article class="panel blue"><h2>Cómo leer los totales</h2><div class="evidence-list"><div><strong>Desembolso</strong><span>${money.format(payroll.totals.disbursement)} efectivamente asociado a pagos y obligaciones del período.</span></div><div><strong>Obligaciones patronales</strong><span>${money.format(payroll.totals.employer)} financiados por la empresa.</span></div><div><strong>Provisiones</strong><span>${money.format(payroll.totals.provisions)} reconocidos para beneficios futuros.</span></div><div><strong>Alcance</strong><span>Se excluye el sexto registro del sistema original para mantener la dotación solicitada.</span></div></div></article>
         </div>
+        ${resourceLinks("Servicios de seguridad social", [
+          ["IESS para empleadores", "Avisos de entrada y salida, comprobantes y obligaciones patronales.", "https://www.iess.gob.ec/empleadores/"],
+        ])}
       </div>
       <div id="remuneraciones-panel-1" class="tab-panel" role="tabpanel" aria-labelledby="remuneraciones-tab-1" hidden>
         <div class="table-toolbar"><label class="search-box">${icon("search")}<span class="sr-only">Buscar trabajador</span><input id="worker-search" type="search" placeholder="Buscar por nombre o cargo" autocomplete="off" /></label><button class="button secondary" type="button" data-print>${icon("print")}Imprimir nómina</button></div>
@@ -233,11 +267,15 @@
           <article class="calculation"><h2>Despido intempestivo simulado</h2><p>Mateo Salazar · sueldo fijo USD 1.300,00 · ingreso 1 de mayo de 2026 · salida 31 de octubre de 2026.</p>${liquidation.rows.map(([name, formula, value]) => `<div class="calc-row"><span>${name}<small>${formula}</small></span><strong>${money.format(value)}</strong></div>`).join("")}<div class="calc-total"><span>Total ilustrativo</span><strong>${money.format(liquidation.total)}</strong></div></article>
           <article class="panel"><h2>Paz y salvo interno</h2><p>Control de activos, accesos y evidencias. No constituye renuncia de derechos ni reemplaza el acta de finiquito.</p><div class="checklist">${liquidation.checklist.map(([name, state, note]) => `<div class="check-row"><span class="check-icon ${state === "Pendiente" ? "pending" : ""}">${state === "Pendiente" ? icon("info") : icon("check")}</span><div><strong>${name}</strong><small>${note}</small></div><span class="tag ${state === "Pendiente" ? "pending" : "complete"}">${state}</span></div>`).join("")}</div></article>
         </div>
-        <div class="table-toolbar"><span></span><button class="button secondary" type="button" data-print>${icon("print")}Imprimir caso</button></div>
+        <div class="table-toolbar"><a class="button primary" href="https://adrianr0112.github.io/Paz-y-Salvo/" target="_blank" rel="noopener noreferrer">Abrir paz y salvo ${icon("external")}<span class="sr-only"> (abre en otra pestaña)</span></a><button class="button secondary" type="button" data-print>${icon("print")}Imprimir caso</button></div>
       </div>
       <div id="liquidacion-panel-2" class="tab-panel" role="tabpanel" aria-labelledby="liquidacion-tab-2" hidden>
         ${documentCards("liquidacion")}
-        <div class="panel" style="margin-top:14px"><h2>Cierre documental</h2><p>El acta debe registrarse mediante el SUT y acompañarse del comprobante de pago. La matriz comparativa aporta criterios sobre jornada, vacaciones, seguridad social e irrenunciabilidad de derechos.</p><a class="button secondary" href="https://calculadoras.trabajo.gob.ec/" target="_blank" rel="noreferrer">Abrir calculadora oficial ${icon("external")}</a></div>
+        <div class="panel" style="margin-top:14px"><h2>Cierre documental</h2><p>El acta debe registrarse mediante el SUT y acompañarse del comprobante de pago. La matriz comparativa aporta criterios sobre jornada, vacaciones, seguridad social e irrenunciabilidad de derechos.</p></div>
+        ${resourceLinks("Servicios del Ministerio del Trabajo", [
+          ["Sistema Único de Trabajo (SUT)", "Portal para trámites laborales y registro de actas de finiquito.", "https://sut.trabajo.gob.ec/"],
+          ["Calculadora de liquidaciones", "Acceso directo a la herramienta oficial de liquidación laboral.", "https://calculadoras.trabajo.gob.ec/liquidaciones"],
+        ])}
       </div>
     </section>`;
   }
