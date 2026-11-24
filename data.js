@@ -26,8 +26,8 @@ window.VIGENTE_DATA = Object.freeze({
     {
       id: "remuneraciones",
       title: "Remuneraciones y nómina",
-      short: "Cinco trabajadores",
-      description: "Resultados ya calculados de sueldos, novedades, beneficios, aportes y costo empresarial del equipo operativo.",
+      short: "Dotación y nómina",
+      description: "Estructura de personal y resultados del caso de nómina: sueldos, novedades, aportes y costo empresarial.",
       tone: "peach",
     },
     {
@@ -112,13 +112,16 @@ window.VIGENTE_DATA = Object.freeze({
       accruedCost: 10932.98,
       disbursement: 9031.43,
     },
-    targetOrganization: [
-      ["Dirección", 1, "Gerencia General"],
-      ["Producto y Tecnología", 9, "Ingeniería, DevOps, QA, Producto y UX/UI"],
-      ["Operaciones y Clientes", 5, "Implementación y soporte"],
-      ["Comercial y Marketing", 4, "Ventas y generación de demanda"],
-      ["Administración y Personas", 3, "Finanzas, contabilidad y talento humano"],
-    ],
+    organization: {
+      board: "Junta de Socios",
+      management: { name: "Gerencia General", count: 1 },
+      areas: [
+        ["Producto y Tecnología", 4, "Dirección de Tecnología, Ingeniería Full Stack, Producto, UX/UI y QA"],
+        ["Operaciones y Clientes", 2, "Operaciones e implementación, soporte al cliente"],
+        ["Comercial y Marketing", 2, "Jefatura Comercial y Marketing, gestión de cuentas y ventas"],
+        ["Administración y Personas", 1, "Administración y finanzas, contabilidad y nómina, gestión de personas"],
+      ],
+    },
   },
   liquidation: {
     worker: "Mateo Salazar",
@@ -152,7 +155,7 @@ window.VIGENTE_DATA = Object.freeze({
   documents: [
     { id: "senadi", module: "emprendimiento", title: "Taller de registro de marca ante el SENADI", description: "Simulación académica con búsqueda exploratoria, clase de Niza y formulario de solicitud.", file: "assets/docs/taller-registro-marca-senadi-vigente.pdf", pages: 4 },
     { id: "plan", module: "emprendimiento", title: "Plan de negocio de Vigente", description: "Identidad, mercado, operación y proyección económica.", file: "assets/docs/plan-negocio-vigente.pdf", pages: 18 },
-    { id: "structure", module: "remuneraciones", title: "Estructura organizacional", description: "Organigrama objetivo de 22 personas y 17 cargos.", file: "assets/docs/estructura-organizacional-vigente.pdf", pages: 2 },
+    { id: "structure", module: "remuneraciones", title: "Estructura organizacional anterior", description: "Documento de referencia del escenario previo de 22 personas y 17 cargos.", file: "assets/docs/estructura-organizacional-vigente.pdf", pages: 2 },
     { id: "salary", module: "remuneraciones", title: "Escalas y remuneraciones", description: "Bandas salariales y costo laboral empresarial modelado.", file: "assets/docs/escalas-remuneraciones-vigente.pdf", pages: 3 },
     { id: "regimes", module: "liquidacion", title: "Matriz de regímenes laborales", description: "Comparación de régimen privado, servicio público y educación superior.", file: "assets/docs/matriz-regimenes-laborales.pdf", pages: 1 },
   ],

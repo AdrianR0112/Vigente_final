@@ -205,7 +205,13 @@ tbody tr:hover { background: #fbfcf9; }
 .canvas-item strong { display: block; font-size: .78rem; }
 .canvas-item p { margin: 8px 0 0; color: var(--muted); font-size: .75rem; line-height: 1.5; }
 
-.org-chart { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px 24px; margin: 24px 0 0; }
+.org-leadership { display: grid; justify-items: center; margin: 24px 0; }
+.org-leadership > div { width: min(100%, 30rem); padding: 16px; border-radius: var(--radius); background: var(--mint); text-align: center; }
+.org-leadership > div:first-child { color: var(--paper); background: var(--ink); }
+.org-leadership > div + div { position: relative; margin-top: 20px; }
+.org-leadership > div + div::before { content: ""; position: absolute; left: 50%; top: -20px; height: 20px; border-left: 1px solid var(--line-strong); }
+.org-leadership p { margin: 6px 0 0; font-size: .875rem; line-height: 1.5; }
+.org-chart { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px 24px; margin: 16px 0 0; }
 .org-unit { padding-top: 12px; border-top: 1px solid var(--line-strong); }
 .org-unit dt { font-weight: 700; }
 .org-unit dd { margin: 4px 0 0; }

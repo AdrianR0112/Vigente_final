@@ -216,11 +216,14 @@
 
   function payrollTemplate() {
     const payroll = data.payroll;
-    const org = payroll.targetOrganization;
+    const { board, management, areas } = payroll.organization;
+    const headcount = areas.reduce((total, [, count]) => total + count, management.count);
     return `<section class="page module-page" data-module="remuneraciones">
-      ${pageHeading("Remuneraciones y nómina", "Cinco trabajadores, sus novedades y el costo empresarial consolidado del período.")}
+      ${pageHeading("Remuneraciones y nómina", "Dotación del modelo organizacional y resultados del caso de nómina del período.")}
       ${tabs("remuneraciones", ["Resumen", "Trabajadores", "Organización y documentos"])}
       <div id="remuneraciones-panel-0" class="tab-panel" role="tabpanel" aria-labelledby="remuneraciones-tab-0">
+        <section class="panel"><h2>Dotación de nómina: ${headcount} personas</h2><p>${[[management.name, management.count], ...areas].map(([name, count]) => `${name} (${count})`).join(" · ")}</p></section>
+        <div class="module-intro"><h2>Caso de nómina: ${payroll.workers.length} trabajadores</h2><p>Los importes corresponden al caso disponible de cinco trabajadores. La dotación de diez personas es el modelo organizacional de referencia.</p></div>
         ${metricRow([
           { label: "Remuneración bruta", value: money.format(payroll.totals.gross), note: "Ingresos y beneficios pagados" },
           { label: "Descuentos", value: money.format(payroll.totals.discounts), note: "Aportes y anticipos" },
@@ -243,12 +246,17 @@
       <div id="remuneraciones-panel-2" class="tab-panel" role="tabpanel" aria-labelledby="remuneraciones-tab-2" hidden>
         <section class="panel">
           <div class="section-heading">
-            <div><h2>Estructura objetivo: 22 personas</h2><p>Dotación proyectada para una etapa futura de crecimiento. La nómina operativa del período incluye cinco trabajadores.</p></div>
+            <div><h2>Estructura organizacional: ${headcount} personas</h2><p>La Junta de Socios ejerce el gobierno corporativo. La dotación del modelo comprende la Gerencia General y las cuatro áreas que le reportan.</p></div>
             ${organizationLink("primary")}
           </div>
-          <dl class="org-chart">${org.map(([area, count, roles]) => `<div class="org-unit"><dt>${area}</dt><dd><strong>${count}</strong><small>${roles}</small></dd></div>`).join("")}</dl>
+          <div class="org-leadership">
+            <div><h3>${board}</h3><p>Aprueba estrategia, inversión, presupuesto y metas anuales.</p></div>
+            <div><h3>${management.name}</h3><p>${management.count} persona · Coordina objetivos, presupuesto y trabajo entre áreas.</p></div>
+          </div>
+          <h3>Áreas que reportan a Gerencia General</h3>
+          <dl class="org-chart">${areas.map(([area, count, roles]) => `<div class="org-unit"><dt>${area}</dt><dd><strong>${count}</strong><small>${roles}</small></dd></div>`).join("")}</dl>
         </section>
-        <div class="module-intro"><div><h2>Documentos de respaldo</h2><p>La estructura y las escalas muestran el modelo empresarial completo; la tabla de nómina conserva resultados de la aplicación existente.</p></div></div>
+        <div class="module-intro"><h2>Documentos de respaldo</h2><p>Estos documentos reúnen los escenarios de estructura y remuneraciones elaborados anteriormente.</p></div>
         ${documentCards("remuneraciones")}
       </div>
     </section>`;
